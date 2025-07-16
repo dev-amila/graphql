@@ -31,6 +31,7 @@ const typeDefs = `#graphql
 
     type Mutation {
         addUser( input: AddUserInput!): User!
+        deleteUser(id:ID!): User!
     }
 
     `;
@@ -76,6 +77,19 @@ const resolvers = {
 
             users.push(newUser);
             return newUser;
+        },
+
+        deleteUser: (_, {id}) => {
+            const userIndex = users.findIndex(
+                (user) => String(user.id) === String(id)
+            );
+
+            if(userIndex === -1){
+                throw new Error("User not found");
+            }
+            const deletedUser =  users[userIndex];
+            users.splice(userIndex, 1);
+            return deletedUser;
         }
 
 
